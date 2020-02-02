@@ -4,11 +4,13 @@ WORD BOUNDARY DETECTION
 WE WANT TO CREATE A MODEL WHICH CAN TAKE THE AUDIO SIGNAL AND CAN TELL THAT WHERE ARE THE WORDS STARTING AND ENDING POSITION
 FOR DOING THAT LETS LOOK AT A SIGNAL
 
-
+![image 1](Images/1.png?raw=true "Title")
 
 AS WE CAN SEE WE CAN`T GET ANY CLUE WHERE THE WORD BREAKS WILL BE BY JUST LOOKING THE RAW AUDIO SIGNAL
 ANOTHER PROBLEM IS DIFFERENT AUDIO SIGNALS HAVE DIFFERENT LENGTHS SO WE HAVE TO FIND A SOLUTION FOR THAT
 THIS AUDIO SIGNAL HAVE 5 WORDS WE CAN SEE THAT FROM THE FIGURE BELOW
+ 
+![image 2](Images/2.png?raw=true "Title") 
  
 WE HAVE 150 AUDIO SIGNALS LIKE THAT AND WE MANUALLY TAKE THE EACH WORDS START TIME END ITS DURATION AND SAVE IT AS A CSV FILE 
 THEN WE CREATE A PROFILE OF WORD FROM THE CSV FILES 
@@ -31,6 +33,8 @@ END
 
 IN THIS WAY WE CREATE A WORD PROFILE OF THE SIGNAL WHICH LOOK LIKE THIS
  
+![image 3](Images/3.png?raw=true "Title") 
+ 
 NOTE: THE WORD PROFILE HAVE SAME LENGTH AS THE AUDIO SIGNAL.
 
 NOW THE THE WORD PROFILE HOLDS ALL THE INFORMATION 
@@ -45,7 +49,7 @@ MEANS THE SIHNAL IS THE INPUTS
 AND WORD PROFILE IS THE OUTPUT
   SIGNAL                                                             MODEL				    WORD PROFILE
    
-
+![image 4](Images/4.png?raw=true "Title")
 
 
 
@@ -61,16 +65,23 @@ FEEDING RAW AUDIO SIGNAL IS NOT A GOOD IDEA TO TRAIN A MODEL SO WE HAVE TO DO SO
 CREATE THE TRAING DATA FOR THE MODEL OR PRE-PROCESSING OF AUDIO 
 LETS TAKE A SIGNAL
  
+![image 5](Images/1.png?raw=true "Title")
+
+![image 6](Images/5.png?raw=true "Title")
 
                               
 AND DIVIDE THE SIGNAL IN 0.5 SEC CHUNKS
 NOW DO THE SAME THING TO WORD PROFILE
+
+![image 7](Images/3.png?raw=true "Title")
+ 
+ ![image 8](Images/6.png?raw=true "Title")
  
                                        
 SO NOW  THIS IS OUR INPUTS STEP BY STEP
     FIRST STEP	SECOND STEP     THIRD		FORTH ………………  SO ON………
                               
-                                                         
+![image 9](Images/7.png?raw=true "Title")                                                         
                                        
 THIS IS OUR MODEL OUTPUTS
 
@@ -83,22 +94,27 @@ THE INPUT SHAPE AND OUTPUT IS REDUCED BUT STILL THE OUTPUT SHAPE IS QUITE BIG FO
 
 
 
-
-
 LETS LOOK AT ONE 0.5 SEC WORD PROFILE
+
+![image 10](Images/8.png?raw=true "Title")
  
 THE WHOLE SQUENCE IS 11025 SAMPLES LONG
 DID WE REALLY NEED THIS MUCH SAMPLES TO MAKE THIS PROFILE THE ANSWER IS NO 
+
+![image 11](Images/9.png?raw=true "Title")
  
-THE BLUE DOT ARE THE 5 ms INTERVAL POINTS
+THE RED DOT ARE THE 5 ms INTERVAL POINTS
 THE SEQUENCE IS 500 ms SO IF WE TAKE ONE VALUE FOR EVERY 5 ms INTERVAL WHICH WILL BE 0 OR 1
 THIS WILL BE ENOUGH VALUES TO REPRESENT THE PROFILE
-NOW LOOK AT THE WORD PROFILE WHICH VALUES ARE ONLY TAKEN AT 5ms INTERVAL AND THE ORIGINAL SIGNAL 
+NOW LOOK AT THE WORD PROFILE WHICH VALUES ARE ONLY TAKEN AT 5ms INTERVAL
+
+![image 12](Images/10.png?raw=true "Title")
  
 
 THOSE POINTS ARE ENOUGH TO REPRESENT THE SIGNAL AND THE TWO SIGNAL ARE ALMOST SAME
 NOW SEE WE HAVE WORD PROFILE OF 0.5 SEC OR 500 ms WHICH LENGTH IS 11025
 NOW WE TAKE ONLY THE 5ms VALUE SO NO OF POINTS WILL BE   500 ms /5 ms = 100 SAMPLES 
+
 
 11025 TO 100 POINTS THIS IS SIGNIFICANT CHANGE IN OUTPUT 
 ONE OF THE ADVANTAGE IS OF LESS NO OF OUTPUT IS THE MODEL WILL BE MORE ACURATE FOR SMALL NO OR TRAINING DATA 
@@ -128,16 +144,13 @@ THIS GIVE 256x100 MATRIX FOR EVERY 0.5 SEC
  SO WE HAVE A [256x100] MATRIX      NOW THIS MATRIX IS THE INPUT TO THE MODEL 
 
     FIRST STEP	SECOND STEP     THIRD		FORTH ………………  SO ON………
-                              
+![image 13](Images/5.png?raw=true "Title")                             
 Mel Spectrogram [256x100] MATRIX
-                                                       
-FEEDING THE MFCC MATRICES TO MODEL ONE BY ONE
-                                                         
+![image 14](Images/11.png?raw=true "Title")                                                                            
+FEEDING THE MEL SPECTROGRAM MATRICES TO MODEL ONE BY ONE
+![image 15](Images/12.png?raw=true "Title")                                                        
 REDUCED 100 POINT  WORD PROFILE
-                                       
-
-
-
+![image 16](Images/6.png?raw=true "Title")                                        
 
 
 
@@ -184,16 +197,16 @@ model.add(Dense(100,activation='sigmoid'))
 
 
 
-
 AFTER TRAIN THE MODEL WE GET 83 % VALIDATION ACCURACY
 NOW TIME TO TEST THE MODEL
 MODEL MODEL IS CABAPLE OF ONLY CREATE  THE WORD PROFILE OF 0.5 SEC SO WE PRECT ALL THE SEQUEENCE OF WORD PROFILES AND COMBINE AT THE END 
 THIS PROFILE IS CREATE BT MODEL 
- 
-AND THIS IS THE ORIGINAL PROFILE 
+![image 17](Images/13.png?raw=true "Title") 
  
 HERE ARE SOME MORE RESULTS:
- 
+
+![image 18](Images/14.png?raw=true "Title") 
+![image 19](Images/15.png?raw=true "Title") 
 
  
 
